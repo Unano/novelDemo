@@ -1,11 +1,12 @@
 <template>
   <div>
     <div class="tabs">
-      <span v-for="(tab, index) in tabs" :key="index" class="novel-tab">{{tab}}</span>
+      <span v-for="(tab, index) in tabs" :key="index" class="novel-tab"
+      :class="{'selected': tabIndex === index}" @click="selectTab(index)">{{tab}}</span>
     </div>
     <div class="top">
       <div class="search-input">
-        <input type="text" placeholder="请输入标签，作者名或作品名进行搜索"/>
+        <input type="text" @keyup.enter="search" v-model="searchStr" placeholder="请输入作者名或作品名进行搜索"/>
       </div>
       <div class="sort">
         <span @click="sortList">按热度排序：<span>{{this.sort ? '升序' : '降序'}}</span></span>
@@ -14,10 +15,9 @@
     <div class="tags">
       <p v-for="(tag, index) in tags" :key="index">
         <span v-if="index === '1'">时期：</span>
-        <span v-if="index === '2'">类别：</span>
-        <span v-if="index === '3'">题材：</span>
-        <span v-if="index === '4'">结局：</span>
-        <span v-for="(item, index) in tag" :key="index" class="novel-tag" :class="{'selected': index === '0'}">{{item}}</span>
+        <span v-if="index === '2'">题材：</span>
+        <span v-if="index === '3'">结局：</span>
+        <span v-for="(item, index) in tag" :key="index" class="novel-tag" :class="{'selected': index === '0'}" :data-tag="item">{{item}}</span>
       </p>
     </div>
     <div class="list">
@@ -37,7 +37,10 @@ export default {
       tags: {},
       novelsInfo: [],
       pageNum: 1,
-      sort: false
+      sort: false,
+      searchStr: '',
+      selectedtags: [],
+      tabIndex: 0
     }
   },
   mounted () {
@@ -64,7 +67,9 @@ export default {
       let params = {
         pageNum: this.pageNum,
         pageSize: 5,
-        sort: this.sort ? 1 : -1
+        sort: this.sort ? 1 : -1,
+        search: this.searchStr,
+        tags: this.selectedtags
       }
       this.axios.get('/novels', {params: params}).then((response) => {
         let res = response.data
@@ -79,6 +84,13 @@ export default {
     sortList () {
       this.sort = !this.sort
       this.getList()
+    },
+
+    search () {
+      this.getList()
+    },
+    selectTab (index) {
+      this.tabIndex = index
     }
   }
 }

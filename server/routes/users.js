@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/users')
+var User = require('../models/users');
+let aboutId = require('../public/javascripts/aboutId');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -10,10 +11,19 @@ router.get('/', function (req, res, next) {
 router.post('/register', function (req, res, next) {
   let account = req.body.account;
   let password = req.body.password;
+  let id = aboutId.createId();
   let user = new User ({
+    id: id,
     account: account,
-    password: password
-  })
+    password: password,
+    reader: {
+      icons: 0,
+      favorate: []
+    },
+    author: {
+      works: []
+    }
+  });
   User.find({ account: account }, function (err, docs) {
     if (err) {
       res.json({
@@ -27,7 +37,6 @@ router.post('/register', function (req, res, next) {
           msg: '该用户名已存在'
         });
       } else {
-        
         // 将新用户添加进数据库中
         user.save( function (err1, docs) {
           if (err1) {
@@ -46,8 +55,6 @@ router.post('/register', function (req, res, next) {
       }
     }
   });
-
-
 });
 // 登录
 router.post('/login', function (req, res, next) {
@@ -63,7 +70,7 @@ router.post('/login', function (req, res, next) {
       });
     } else {
       if (docs) {
-        res.cookie('userId', docs.id, {
+        res.cookie('userName', docs.account, {
           path: '/',
           maxAge: 1000 * 60 * 60
         });
@@ -81,7 +88,7 @@ router.post('/login', function (req, res, next) {
 
 // 登出
 router.post('/logout', function (req, res, next) {
-  res.cookie('userId', '', {
+  res.cookie('userName', '', {
     path: '/',
     maxAge: -1
   });
@@ -89,6 +96,26 @@ router.post('/logout', function (req, res, next) {
     status: '0',
     msg: '',
     result: ''
+  });
+});
+
+// 个人中心
+router.get('/personal', function (req, res, next) {
+  let query = req.query;
+  let user = query.user;
+  User.findOne({account: user}, function (err, doc) {
+    if (err) {
+      res.json({
+        status: '1',
+        msg: err.message
+      });
+    } else {
+      res.json({
+        status: '0',
+        msg: '',
+        result: doc
+      });
+    }
   });
 });
 module.exports = router;

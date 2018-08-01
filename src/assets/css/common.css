@@ -52,6 +52,10 @@ textarea {
   font-weight: bold;
   cursor: pointer;
 }
+.novel-tab.selected {
+  background-color: transparent;
+  color: #538ddc;
+}
 .novel-tab:hover {
   background-color: transparent;
   color: #538ddc;
@@ -84,6 +88,18 @@ textarea {
   padding-left: 10px;
   border: 1px solid #777;
   border-radius: 2px;
+}
+.common-input textarea {
+  height: 100px;
+  width: 300px;
+  padding: 10px;
+  font-size: 15px;
+}
+.common-input select {
+  width: 100px;
+  height: 25px;
+  font-size: 15px;
+  background-color: #fff;
 }
 .mask {
   width: 100vw;

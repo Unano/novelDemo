@@ -4,10 +4,11 @@ var Schema = mongoose.Schema;
 var novelSchema = new Schema({
   'id': Number,
   'title': String,
-  'state': Object,
+  'author': String,
+  'state': String,
   'introduce': String,
-  'tags': Array,
-  'click': Number
+  'tags': String,
+  'click': String
 });
 
 module.exports = mongoose.model('Novel', novelSchema);

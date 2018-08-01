@@ -44,6 +44,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 登录拦截
+app.use(function (req, res, next) {
+  if (req.cookies.userName) {
+    next();
+  } else {
+    let whiteList = req.originalUrl === '/users/login' ||
+                    req.originalUrl === '/users/logout' ||
+                    req.originalUrl === '/users/register' ||
+                    req.path === '/novels' ||
+                    req.path === '/tags' 
+    if(whiteList) {
+      next();
+    } else {
+      res.json({
+        status: '1001',
+        msg: '请先登录'
+      })
+    }
+  }
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/novels', novelsRouter);

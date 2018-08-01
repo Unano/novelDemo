@@ -1,9 +1,5 @@
 <template>
   <div class="novel-introduce">
-    <div class="corner top-left"></div>
-    <div class="corner top-right"></div>
-    <div class="corner bottom-left"></div>
-    <div class="corner bottom-right"></div>
     <div class="poster">
       <img v-lazy="'static/imgs/test.png'" />
     </div>
@@ -39,6 +35,8 @@ export default {
   height: 170px;
   display: inline-block;
   margin: 5px;
+  border: 1px solid #798eab;
+  border-radius: 3px;
 }
 .introduce {
   position: absolute;
@@ -57,36 +55,6 @@ export default {
     width: 100px;
     height: 150px;
     border: 1px dotted #98989F;
-  }
-}
-.corner {
-  position: absolute;
-  height: 40px;
-  width: 40px;
-  border: 1px solid #948b8b;
-  &.top-left {
-    top: 0;
-    left: 0;
-    border-right: 0;
-    border-bottom: 0;
-  }
-  &.top-right {
-    top: 0;
-    right: 0;
-    border-left: 0;
-    border-bottom: 0;
-  }
-  &.bottom-left {
-    bottom: 0;
-    left: 0;
-    border-top: 0;
-    border-right: 0;
-  }
-  &.bottom-right {
-    bottom: 0;
-    right: 0;
-    border-top: 0;
-    border-left: 0;
   }
 }
 .view {
