@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Novel = require('../models/novels');
 const User = require('../models/users')
-let aboutId = require('../public/javascripts/aboutId')
+let aboutId = require('../util/aboutId')
 
 // 获取小说列表
 router.get('/', function (req, res, next) {
@@ -21,26 +21,38 @@ router.get('/', function (req, res, next) {
       ]
     };
   }
-
-  let novelModel = Novel.find(params).skip(skip).limit(pageSize);
-  novelModel.sort({click: sort});
-  novelModel.exec(function (err, docs) {
+  Novel.find(params, function (err, doc) {
     if (err) {
       res.json({
         status: '1',
-        msg: err.message,
+        msg: err.messsage
       });
     } else {
-      res.json({
-        status: '0',
-        msg: '',
-        result: {
-          count: docs.length,
-          data: docs
-        }
-      });
+      if (doc) {
+        let count = doc.length
+        // skip表示跳过的数据条数，limit表示限制的数据的条数
+        let novelModel = Novel.find(params).skip(skip).limit(pageSize);
+        novelModel.sort({click: sort});
+        novelModel.exec(function (err, docs) {
+          if (err) {
+            res.json({
+              status: '1',
+              msg: err.message,
+            });
+          } else {
+            res.json({
+              status: '0',
+              msg: '',
+              result: {
+                count: count,
+                data: docs
+              }
+            });
+          }
+        });
+      }
     }
-  });
+  })
 });
 
 // 创建/编辑小说
@@ -81,15 +93,15 @@ router.post('/createNovel', function (req, res, next) {
           } else {
             if (doc1) {
               let userAuthor = doc1.author;
-              let works = userAuthor.works;
-              if (works) {
-                works.push(novelData);
+              let novels = userAuthor.novels;
+              if (novels) {
+                novels.push(novelData);
               } else {
-                works = [novelData];
+                novels = [novelData];
               }
-              author.works = works;
+              author.novels = novels;
               // 更新user是中对应的数据
-              User.update({ account: author }, { 'author.works': works}, function (err2, doc2) {
+              User.update({ account: author }, { 'author.novels': novels}, function (err2, doc2) {
                 if (err2) {
                   res.json({
                     status: '1',
@@ -108,7 +120,7 @@ router.post('/createNovel', function (req, res, next) {
         });
       }
     });
-  } 
+  }
   // 编辑小说
 
 
@@ -134,12 +146,12 @@ router.post('/deleteNovel', function (req, res, next) {
           });
         } else {
           if (doc1) {
-            let works = doc1.author.works;
-            let index = works.findIndex((item) => {
+            let novels = doc1.author.novels;
+            let index = novels.findIndex((item) => {
               return item.id == id
             });
-            works.splice(index, 1);
-            User.updateOne({account: author}, {'author.works': works}, function (err2, doc2) {
+            novels.splice(index, 1);
+            User.updateOne({account: author}, {'author.novels': novels}, function (err2, doc2) {
               if (err2) {
                 res.json({
                   status: '1',

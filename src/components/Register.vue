@@ -15,6 +15,9 @@
           <label>确认密码：</label>
           <input type="password" v-model="confirmPassword"/>
         </div>
+        <div>
+          <input type="checkbox"/><label>注册成功后直接登录</label>
+        </div>
         <div class="footer">
           <span class="common-button" @click="register">注册</span>
           <span class="common-button" @click="cancle">取消</span>

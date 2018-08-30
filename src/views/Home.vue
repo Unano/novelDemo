@@ -23,11 +23,15 @@
     <div class="list">
       <novel-introduce v-for="(novel, index) in novelsInfo" :key="index" :info="novel"/>
     </div>
+    <div>
+      <pagination v-if="paginationInfo.count > 0" :info="paginationInfo" @change="changePage"/>
+    </div>
   </div>
 </template>
 
 <script>
 import NovelIntroduce from '@/components/NovelIntroduce'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'Home',
@@ -40,7 +44,10 @@ export default {
       sort: false,
       searchStr: '',
       selectedtags: [],
-      tabIndex: 0
+      tabIndex: 0,
+      paginationInfo: { // 分页的信息
+        count: 0
+      }
     }
   },
   mounted () {
@@ -48,7 +55,8 @@ export default {
     this.getList()
   },
   components: {
-    NovelIntroduce
+    NovelIntroduce,
+    Pagination
   },
   methods: {
     // 取得标签数据
@@ -66,7 +74,7 @@ export default {
     getList () {
       let params = {
         pageNum: this.pageNum,
-        pageSize: 5,
+        pageSize: 10,
         sort: this.sort ? 1 : -1,
         search: this.searchStr,
         tags: this.selectedtags
@@ -75,6 +83,7 @@ export default {
         let res = response.data
         if (res.status === '0') {
           this.novelsInfo = res.result.data
+          this.paginationInfo.count = res.result.count
         } else {
           alert(res.msg)
         }
@@ -85,7 +94,11 @@ export default {
       this.sort = !this.sort
       this.getList()
     },
-
+    // 改变当前页数
+    changePage (val) {
+      this.pageNum = val
+      this.getList()
+    },
     search () {
       this.getList()
     },

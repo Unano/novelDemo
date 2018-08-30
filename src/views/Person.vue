@@ -19,8 +19,8 @@
     </div>
     <div v-if="tabIndex === 1 && !createNovel">
       <span class="section-name">我的文章：</span>
-      <div class="my-works">
-        <poster v-if="author.works.length > 0" v-for="(work, index) in author.works" :info="work" :key="index">
+      <div class="my-novels">
+        <poster v-if="author.novels.length > 0" v-for="(work, index) in author.novels" :info="work" :key="index">
           <span slot="btn" class="btns">
             <span class="common-button">编辑</span>
             <span class="common-button" @click="deleteNovel(work.id)">删除</span>
@@ -179,7 +179,7 @@ export default {
   .create-novel {
     margin: 20px 0 20px 15px;
   }
-  .my-works {
+  .my-novels {
     padding: 10px;
   }
   .section-name {

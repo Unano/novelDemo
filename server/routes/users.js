@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
-let aboutId = require('../public/javascripts/aboutId');
+let aboutId = require('../util/aboutId');
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -21,7 +21,7 @@ router.post('/register', function (req, res, next) {
       favorate: []
     },
     author: {
-      works: []
+      novels: []
     }
   });
   User.find({ account: account }, function (err, docs) {

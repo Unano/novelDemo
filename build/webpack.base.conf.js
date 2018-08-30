@@ -21,7 +21,7 @@ const createLintingRule = () => ({
 
 module.exports = {
   // 解析和加载的初始路径
-  context: path.resolve(__dirname, '../'), 
+  context: path.resolve(__dirname, '../'),
   // 入口起点，指示webpack应该使用哪个模块，来作为构建起内部依赖图的开始
   entry: {
     // 输出后文件名为app.js
