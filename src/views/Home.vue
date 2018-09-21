@@ -23,15 +23,15 @@
     <div class="list">
       <novel-introduce v-for="(novel, index) in novelsInfo" :key="index" :info="novel"/>
     </div>
-    <div>
-      <pagination v-if="paginationInfo.count > 0" :info="paginationInfo" @change="changePage"/>
-    </div>
+    <pagination v-if="paginationInfo.count > 0" :info="paginationInfo" @change="changePage"/>
+    <no-data />
   </div>
 </template>
 
 <script>
 import NovelIntroduce from '@/components/NovelIntroduce'
 import Pagination from '@/components/Pagination'
+import NoData from '@/components/NoData'
 
 export default {
   name: 'Home',
@@ -56,7 +56,8 @@ export default {
   },
   components: {
     NovelIntroduce,
-    Pagination
+    Pagination,
+    NoData
   },
   methods: {
     // 取得标签数据
@@ -74,7 +75,7 @@ export default {
     getList () {
       let params = {
         pageNum: this.pageNum,
-        pageSize: 10,
+        pageSize: 9,
         sort: this.sort ? 1 : -1,
         search: this.searchStr,
         tags: this.selectedtags
@@ -84,6 +85,7 @@ export default {
         if (res.status === '0') {
           this.novelsInfo = res.result.data
           this.paginationInfo.count = res.result.count
+          console.log(this.paginationInfo.count, '父组件的总条数是多少')
         } else {
           alert(res.msg)
         }

@@ -33,9 +33,9 @@ router.get('/', function (req, res, next) {
         // skip表示跳过的数据条数，limit表示限制的数据的条数
         let novelModel = Novel.find(params).skip(skip).limit(pageSize);
         novelModel.sort({click: sort});
-        novelModel.exec(function (err, docs) {
-          if (err) {
-            res.json({
+        novelModel.exec(function (err1, docs) {
+          if (err1) {
+            res1.json({
               status: '1',
               msg: err.message,
             });
@@ -56,10 +56,9 @@ router.get('/', function (req, res, next) {
 });
 
 // 创建/编辑小说
-router.post('/createNovel', function (req, res, next) {
+router.post('/save', function (req, res, next) {
   let query = req.body;
   let reqId = query.id || '';
-  // 创建小说
   if (!reqId) {
     let id = aboutId.createId();  // 虚假的id
     let title = query.title;
@@ -121,9 +120,10 @@ router.post('/createNovel', function (req, res, next) {
       }
     });
   }
-  // 编辑小说
-
-
+});
+// 编辑页的小说数据
+router.get('/edit', function (req, res, next) {
+  let query = req.query;
 });
 
 // 删除小说

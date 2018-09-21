@@ -19,9 +19,9 @@ export default {
   props: ['info'],
   data () {
     return {
-      count: 23, // 总的数据条数
+      // count: 23, // 总的数据条数
       currentPage: 1, // 当前页数
-      pageSize: 10, // 每页数据条数
+      pageSize: 9, // 每页数据条数
       pageCount: 0, // 总的页数
       pageCenterNum: 5, // 正中间部分显示的页数（为奇数）
       pageArr: [], // 正中间部分页数的数组
@@ -31,8 +31,13 @@ export default {
       insertPageNum: ''
     }
   },
-  created () {
-    this.init()
+  watch: {
+    info: {
+      handler: function () {
+        this.init()
+      },
+      deep: true // 深度观察
+    }
   },
   computed: {
     showPrevMore () { // 显示左边的省略号
@@ -43,12 +48,14 @@ export default {
       return this.pageArr[i] + 1 < this.pageCount
     }
   },
+  created () {
+    this.init()
+  },
   methods: {
     // 初始化
     init () {
       this.count = this.info.count
-      console.log(this.count, 'aaa')
-      // debugger
+      console.log(this.count, '子组件的总条数是多少？')
       this.pageCount = Math.ceil(this.count / this.pageSize)
       if (this.pageCount > 1 && this.pageCount <= this.pageCenterNum + 2) {
         let i = 1
